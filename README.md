@@ -1,2 +1,2 @@
-# PokeMoles
+# PokeCats
 game based on Android
