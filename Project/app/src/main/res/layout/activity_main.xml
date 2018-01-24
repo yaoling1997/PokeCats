@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/background"
     android:id="@+id/mainLayout">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/title" />
 
     <Button
         android:id="@+id/btnStart"
@@ -14,6 +24,7 @@
         android:layout_above="@id/btnSetting"
         android:text="Start"
         android:onClick="onClick"
+        android:textAllCaps="false"
         style="@style/myButtonStyle"/>
     <Button
         android:id="@+id/btnSetting"
@@ -21,18 +32,32 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:text="Setting"
         android:onClick="onClick"
+        android:textAllCaps="false"
+        style="@style/myButtonStyle"/>
+    <Button
+        android:id="@+id/btnScoreboard"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btnSetting"
+        android:layout_marginTop="10dp"
+        android:text="Scoreboard"
+        android:onClick="onClick"
+        android:textAllCaps="false"
         style="@style/myButtonStyle"/>
     <Button
         android:id="@+id/btnExit"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/btnSetting"
+        android:layout_below="@id/btnScoreboard"
+        android:layout_marginTop="10dp"
         android:text="Exit"
         android:onClick="onClick"
+        android:textAllCaps="false"
         style="@style/myButtonStyle"/>
+
 
 </RelativeLayout>

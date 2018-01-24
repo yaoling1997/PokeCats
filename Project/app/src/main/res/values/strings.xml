@@ -3,4 +3,7 @@
     <string name="btnSpace">50dp</string>
     <string name="bgMusic">Background Music:</string>
     <string name="sounds">Sounds:</string>
+    <string name="No1">No.1:</string>
+    <string name="No2">No.2:</string>
+    <string name="No3">No.3:</string>
 </resources>

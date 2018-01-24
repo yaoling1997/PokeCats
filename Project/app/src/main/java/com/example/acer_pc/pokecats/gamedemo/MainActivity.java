@@ -19,6 +19,11 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         prefs=getSharedPreferences(Macro.PREFS_FILE,MODE_PRIVATE);
+
+//        SharedPreferences.Editor editor = prefs.edit();//清空用户保存的数据
+//        editor.clear();
+//        editor.commit();
+
         Intent intent= new Intent(this,MusicService.class);
         intent.putExtra(Macro.BG_MUSIC,prefs.getString(Macro.BG_MUSIC,Macro.CLOSE));//open or close
         startService(intent);
@@ -38,6 +43,10 @@ public class MainActivity extends Activity {
         }else if (view.getId()==R.id.btnSetting){
             Intent intent= new Intent();
             intent.setAction(Macro.ACTION_SETTING_ACTIVITY);
+            startActivity(intent);
+        }else if (view.getId()==R.id.btnScoreboard){
+            Intent intent= new Intent();
+            intent.setAction(Macro.ACTION_SCOREBOARD_ACTIVITY);
             startActivity(intent);
         }else if (view.getId()==R.id.btnExit){
             this.finish();
