@@ -22,6 +22,8 @@ public class Hole {
     public Hole(float x, float y) {
         this.x = x;
         this.y = y;
+        status=EMPTY;
+        id=0;
     }
 
     public float getX() {
@@ -32,11 +34,6 @@ public class Hole {
         return y;
     }
 
-
-    public void init(){
-        status=EMPTY;
-        id=0;
-    }
 
     public int getStatus() {
         return status;

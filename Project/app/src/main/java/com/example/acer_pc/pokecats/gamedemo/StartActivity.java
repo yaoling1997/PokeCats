@@ -1,8 +1,10 @@
 package com.example.acer_pc.pokecats.gamedemo;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.Window;
 import android.widget.RelativeLayout;
@@ -15,7 +17,9 @@ import java.util.Timer;
 
 public class StartActivity extends Activity {
     public static Timer timer;
-    RelativeLayout layout;
+    private RelativeLayout layout;
+    private GameView gameView;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +27,7 @@ public class StartActivity extends Activity {
         setContentView(R.layout.activity_start);
         timer= new Timer();
         Log.i("yaoling1997","startActivity");
-        GameView gameView= new GameView(this);
+        gameView= new GameView(this);
         Log.i("yaoling1997","before initGame");
         gameView.initGame();
         Log.i("yaoling1997","before afterInitGame");
@@ -34,6 +38,8 @@ public class StartActivity extends Activity {
     @Override
     protected void onDestroy() {
         timer.cancel();
+        if (gameView.soundPool!=null)
+            gameView.soundPool.release();
         super.onDestroy();
     }
 }

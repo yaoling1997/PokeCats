@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -32,17 +31,28 @@ public class SettingActivity extends Activity {
             @Override
             public void onClick(View view) {
                 prefs=getSharedPreferences(Macro.PREFS_FILE,MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
                 if (prefs.getString(Macro.BG_MUSIC,Macro.CLOSE).equals(Macro.CLOSE)){//close->open
-                    SharedPreferences.Editor editor = prefs.edit();
                     editor.putString(Macro.BG_MUSIC,Macro.OPEN);
-                    editor.commit();
-                    applyPrefs();
                 }else {//open->close
-                    SharedPreferences.Editor editor = prefs.edit();
                     editor.putString(Macro.BG_MUSIC,Macro.CLOSE);
-                    editor.commit();
-                    applyPrefs();
                 }
+                editor.commit();
+                applyPrefs();
+            }
+        });
+        btnSounds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                prefs=getSharedPreferences(Macro.PREFS_FILE,MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                if (prefs.getString(Macro.SOUNDS,Macro.CLOSE).equals(Macro.CLOSE)){//close->open
+                    editor.putString(Macro.SOUNDS,Macro.OPEN);
+                }else {//open->close
+                    editor.putString(Macro.SOUNDS,Macro.CLOSE);
+                }
+                editor.commit();
+                applyPrefs();
             }
         });
     }
@@ -62,6 +72,11 @@ public class SettingActivity extends Activity {
         }else {
             btnBgMusic.setBackgroundDrawable(getDrawable(R.drawable.btn_off));
             intent.putExtra(Macro.BG_MUSIC,prefs.getString(Macro.BG_MUSIC,Macro.CLOSE));//open or close
+        }
+        if (prefs.getString(Macro.SOUNDS,Macro.CLOSE).equals(Macro.OPEN)) {
+            btnSounds.setBackgroundDrawable(getDrawable(R.drawable.btn_on));
+        }else {
+            btnSounds.setBackgroundDrawable(getDrawable(R.drawable.btn_off));
         }
         btnBgMusic.invalidate();
         startService(intent);

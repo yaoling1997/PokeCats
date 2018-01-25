@@ -10,8 +10,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,28 +33,43 @@ import java.util.TimerTask;
  */
 
 public class GameView extends View {
-    private static final int INIT_HP=20;//初始HP
+    private static final int INIT_HP=10;//初始HP
     private static final int INIT_SCORE=0;//初始score
-    private static int []bonus={1,2,3};//每打到一只喵喵增加的分数
-    private static int gridLength=420;//一个格子的长宽
-    private static int rowNum=4;//多少行
-    private static int colNum=3;//多少列
-    private static int textSize=40;//字体大小
-    private static int HPX=20;//HP的X
-    private static int HPY=50;//HP的Y
-    private static int scoreX=20;//score的X
-    private static int scoreY=80;//score的Y
-    private static int catKindNum=3;//喵喵种类
+    private static final int []bonus={1,2,3};//每打到一只喵喵增加的分数
+    private static final int gridLength=420;//一个格子的长宽
+    private static final int rowNum=3;//多少行
+    private static final int colNum=3;//多少列
+    private static final int textSize=40;//字体大小
+    private static final int HPX=20;//HP的X
+    private static final int HPY=50;//HP的Y
+    private static final int scoreX=20;//score的X
+    private static final int scoreY=80;//score的Y
+    private static final int catKindNum=3;//喵喵种类
+    private static final int putCatDelay =10;//延迟多久开始放喵，延迟时长为putCatDelay*putCatPeriod
+    private static final int putCatPeriod =300;//放喵的周期
     private int HP=INIT_HP;//生命值
     private int score=INIT_SCORE;//得分
     private boolean isUpdateing=false;
     private Random random= new Random();
     private Hole [][]holes;
     private boolean isOver=false;
-    private Context myContext;
+    public SoundPool soundPool=null;
+    private int pokedSoundId=-1;
+    private int []catSoundId;
+    private int restPutCatDelay=0;
+
+    private final Handler handler= new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what==0x123&&!isUpdateing&&!isOver){//更新画布
+                invalidate();
+            }
+            super.handleMessage(msg);
+        }
+    };//处理事件
+
     public GameView(Context context) {
         super(context);
-        myContext=context;
     }
     public class MyPoint{
         public float x,y;
@@ -59,6 +79,28 @@ public class GameView extends View {
             this.y = y;
         }
     }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void initSounds(){
+        pokedSoundId=-1;
+        catSoundId=new int[catKindNum];
+        for (int i=0;i<catKindNum;i++)
+            catSoundId[i]=-1;
+        SharedPreferences prefs= getContext().getSharedPreferences(Macro.PREFS_FILE,Context.MODE_PRIVATE);
+        if (prefs.getString(Macro.SOUNDS,Macro.CLOSE).equals(Macro.OPEN)) {
+            SoundPool.Builder spb = new SoundPool.Builder();
+            spb.setMaxStreams(100);
+            AudioAttributes.Builder attrBuilder = new AudioAttributes.Builder();
+            //设置音频流的合适属性
+            attrBuilder.setLegacyStreamType(AudioManager.STREAM_MUSIC);
+            spb.setAudioAttributes(attrBuilder.build());    //转换音频格式
+            soundPool = spb.build();      //创建SoundPool对象
+            pokedSoundId = soundPool.load(getContext(), R.raw.duang, 1);
+            catSoundId[0] = soundPool.load(getContext(), R.raw.cat1, 1);
+            catSoundId[1] = soundPool.load(getContext(), R.raw.cat2, 1);
+            catSoundId[2] = soundPool.load(getContext(), R.raw.cat3, 1);
+        }
+    }
+
     private void initAnimation0(){
         Hole.animationOutAndIn[0]= new Bitmap[20];
         Hole.animationOutAndIn[0][0]=getBitmap(R.drawable.cat1_1,1*gridLength/6);
@@ -169,7 +211,23 @@ public class GameView extends View {
             }
 
     }
+    private void playSound(int id){
+        if (id<0)
+            return;
+        soundPool.play(id, 1, 1, 0, 0, 1);
+        Log.i("yaoling1997","play Sound Successfully id:"+id);
+    }
+    private void restart(){
+        HP= INIT_HP;
+        score=INIT_SCORE;
+        isOver=false;
+        initRandomLayout();
+        restPutCatDelay=putCatDelay;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void initGame(){
+        initSounds();
         initAnimation();
         Hole.poked=getBitmap(R.drawable.poked,gridLength);
         Hole.stubFront=getBitmap(R.drawable.stub_front,gridLength);
@@ -177,55 +235,44 @@ public class GameView extends View {
         Log.i("yaoling1997","Hole ok");
         holes= new Hole[rowNum][colNum];
         //initMatrixLayout();
-        initRandomLayout();
-        final Handler handler= new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what==0x123&&!isUpdateing){//更新画布
-                    invalidate();
-                }
-                super.handleMessage(msg);
-            }
-        };
+        restart();
         StartActivity.timer.schedule(new TimerTask() {//随机放喵喵
             @Override
             public void run() {
-                //Log.i("yaoling1997","put");
-                int row= random.nextInt(rowNum);
-                int col= random.nextInt(colNum);
-                if (holes[row][col].getStatus()==Hole.EMPTY){
-                    int tmp= random.nextInt(6);
-                    if (tmp>=5)
-                        tmp=2;
-                    else if (tmp>=3)
-                        tmp=1;
-                    else tmp=0;
-                    holes[row][col].begin(tmp);
-                    handler.sendEmptyMessage(0x123);
+                if (restPutCatDelay>0)
+                    restPutCatDelay--;
+                if (!isOver&&restPutCatDelay==0) {
+                    //Log.i("yaoling1997","put");
+                    int row = random.nextInt(rowNum);
+                    int col = random.nextInt(colNum);
+                    if (holes[row][col].getStatus() == Hole.EMPTY) {
+                        int tmp = random.nextInt(6);
+                        if (tmp >= 5)
+                            tmp = 2;
+                        else if (tmp >= 3)
+                            tmp = 1;
+                        else tmp = 0;
+                        holes[row][col].begin(tmp);
+                        handler.sendEmptyMessage(0x123);
+                        playSound(catSoundId[tmp]);
+                    }
                 }
             }
-        },0,200);
+        },0, putCatPeriod);
         StartActivity.timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                //Log.i("yaoling1997","update");
-                for (int i=0;i<rowNum;i++)
-                    for (int j=0;j<colNum;j++) {
-                        if (!holes[i][j].next())
-                            HP=Math.max(0,HP-1);
-                    }
-                handler.sendEmptyMessage(0x123);
+                if (!isOver) {
+                    //Log.i("yaoling1997","update");
+                    for (int i = 0; i < rowNum; i++)
+                        for (int j = 0; j < colNum; j++) {
+                            if (!holes[i][j].next())
+                                HP = Math.max(0, HP - 1);
+                        }
+                    handler.sendEmptyMessage(0x123);
+                }
             }
         },0,120);
-    }
-    private void restart(){
-        HP= INIT_HP;
-        score=INIT_SCORE;
-        for (int i=0;i<rowNum;i++)
-            for (int j=0;j<colNum;j++)
-                holes[i][j].init();
-        isOver=false;
-        initRandomLayout();
     }
     private Bitmap getBitmap(int id,int height){
         //height:从上往下截多长
@@ -280,7 +327,7 @@ public class GameView extends View {
         if (isOver)
             return;
         isOver=true;
-        SharedPreferences prefs= myContext.getSharedPreferences(Macro.PREFS_FILE,Context.MODE_PRIVATE);
+        SharedPreferences prefs= getContext().getSharedPreferences(Macro.PREFS_FILE,Context.MODE_PRIVATE);
         int tmpScore= score;
         for (int i=0;i<ScoreboardActivity.NoNum;i++){
             int oldScore=prefs.getInt(Macro.NO[i],0);
@@ -326,6 +373,9 @@ public class GameView extends View {
                     if (holes[i][j].poke()) {
                         score+=bonus[holes[i][j].getId()];
                         invalidate();
+                        Log.i("yaoling1997","pokedSoundId:"+pokedSoundId);
+                        if (pokedSoundId>=0)
+                            playSound(pokedSoundId);
                         return true;
                     }
                 }
