@@ -300,10 +300,12 @@ public class GameView extends View {
                 int status=holes[i][j].getStatus();
                 int id=holes[i][j].getId();
                 Bitmap b;
+                Paint paint= new Paint();
                 if (status==Hole.EMPTY){
                     b=Hole.stubBack;
                 }else if (status<Hole.EMPTY){
                     b=Hole.poked;
+                    paint.setAlpha((Hole.EMPTY-status)*255/(Hole.EMPTY- Hole.POKED));
                 }else {
                     b= Hole.animationOutAndIn[id][status];
                 }
@@ -311,7 +313,7 @@ public class GameView extends View {
                 float y= holes[i][j].getY();
                 float catY= y+gridLength-b.getHeight();
                 canvas.drawBitmap(Hole.stubBack,x,y,null);
-                canvas.drawBitmap(b,x,catY,null);
+                canvas.drawBitmap(b,x,catY,paint);
                 canvas.drawBitmap(Hole.stubFront,x,y,null);
             }
     }

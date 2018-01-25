@@ -18,45 +18,37 @@
 
     <Button
         android:id="@+id/btnStart"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/btnSetting"
+        android:layout_centerInParent="true"
         android:text="Start"
         android:onClick="onClick"
-        android:textAllCaps="false"
+        android:background="@drawable/btn_background"
         style="@style/myButtonStyle"/>
     <Button
         android:id="@+id/btnSetting"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btnStart"
         android:layout_marginTop="10dp"
         android:text="Setting"
         android:onClick="onClick"
-        android:textAllCaps="false"
+        android:background="@drawable/btn_background"
         style="@style/myButtonStyle"/>
     <Button
         android:id="@+id/btnScoreboard"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/btnSetting"
         android:layout_marginTop="10dp"
         android:text="Scoreboard"
         android:onClick="onClick"
-        android:textAllCaps="false"
+        android:background="@drawable/btn_background"
         style="@style/myButtonStyle"/>
     <Button
         android:id="@+id/btnExit"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/btnScoreboard"
         android:layout_marginTop="10dp"
         android:text="Exit"
         android:onClick="onClick"
-        android:textAllCaps="false"
+        android:background="@drawable/btn_background"
         style="@style/myButtonStyle"/>
 
 
