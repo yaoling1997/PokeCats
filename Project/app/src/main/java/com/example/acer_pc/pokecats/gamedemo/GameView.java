@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -35,7 +34,7 @@ import java.util.TimerTask;
 public class GameView extends View {
     private static final int INIT_HP=10;//初始HP
     private static final int INIT_SCORE=0;//初始score
-    private static final int []bonus={1,2,3};//每打到一只喵喵增加的分数
+    private static final int []bonus={1,3,5};//每打到一只喵喵增加的分数
     private static final int gridLength=420;//一个格子的长宽
     private static final int rowNum=3;//多少行
     private static final int colNum=3;//多少列
@@ -47,6 +46,9 @@ public class GameView extends View {
     private static final int catKindNum=3;//喵喵种类
     private static final int putCatDelay =10;//延迟多久开始放喵，延迟时长为putCatDelay*putCatPeriod
     private static final int putCatPeriod =300;//放喵的周期
+    private static final int framePeriod =100;//相邻两帧动画的时间间隔
+
+    private StartActivity myContext;
     private int HP=INIT_HP;//生命值
     private int score=INIT_SCORE;//得分
     private boolean isUpdateing=false;
@@ -56,7 +58,7 @@ public class GameView extends View {
     public SoundPool soundPool=null;
     private int pokedSoundId=-1;
     private int []catSoundId;
-    private int restPutCatDelay=0;
+    private int restPutCatDelay=0;//还剩多久时间放喵
 
     private final Handler handler= new Handler(){
         @Override
@@ -67,10 +69,6 @@ public class GameView extends View {
             super.handleMessage(msg);
         }
     };//处理事件
-
-    public GameView(Context context) {
-        super(context);
-    }
     public class MyPoint{
         public float x,y;
 
@@ -79,6 +77,12 @@ public class GameView extends View {
             this.y = y;
         }
     }
+
+    public GameView(Context context) {
+        super(context);
+        myContext= (StartActivity)context;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initSounds(){
         pokedSoundId=-1;
@@ -156,11 +160,35 @@ public class GameView extends View {
         Hole.animationOutAndIn[2][8]=getBitmap(R.drawable.cat3_7,2*gridLength/6);
         Hole.animationOutAndIn[2][9]=getBitmap(R.drawable.cat3_8,1*gridLength/6);
     }
+    private void initAnimationBomb(){
+        Hole.animationBomb= new Bitmap[20];
+        Hole.animationBomb[0]=getBitmap(R.drawable.bomb,1*gridLength/6);
+        Hole.animationBomb[1]=getBitmap(R.drawable.bomb,2*gridLength/6);
+        Hole.animationBomb[2]=getBitmap(R.drawable.bomb,3*gridLength/6);
+        Hole.animationBomb[3]=getBitmap(R.drawable.bomb,5*gridLength/6);
+        Hole.animationBomb[4]=getBitmap(R.drawable.bomb,5*gridLength/6);
+        Hole.animationBomb[5]=getBitmap(R.drawable.bomb,5*gridLength/6);
+        Hole.animationBomb[6]=getBitmap(R.drawable.bomb,5*gridLength/6);
+        Hole.animationBomb[7]=getBitmap(R.drawable.bomb,5*gridLength/6);
+        Hole.animationBomb[8]=getBitmap(R.drawable.bomb,4*gridLength/6);
+        Hole.animationBomb[9]=getBitmap(R.drawable.bomb,3*gridLength/6);
+        Hole.animationBomb[10]=getBitmap(R.drawable.bomb,3*gridLength/6);
+        Hole.animationBomb[11]=getBitmap(R.drawable.bomb,4*gridLength/6);
+        Hole.animationBomb[12]=getBitmap(R.drawable.bomb,5*gridLength/6);
+        Hole.animationBomb[13]=getBitmap(R.drawable.bomb,5*gridLength/6);
+        Hole.animationBomb[14]=getBitmap(R.drawable.bomb,5*gridLength/6);
+        Hole.animationBomb[15]=getBitmap(R.drawable.bomb,5*gridLength/6);
+        Hole.animationBomb[16]=getBitmap(R.drawable.bomb,5*gridLength/6);
+        Hole.animationBomb[17]=getBitmap(R.drawable.bomb,3*gridLength/6);
+        Hole.animationBomb[18]=getBitmap(R.drawable.bomb,2*gridLength/6);
+        Hole.animationBomb[19]=getBitmap(R.drawable.bomb,1*gridLength/6);
+    }
     private void initAnimation(){
         Hole.animationOutAndIn= new Bitmap[catKindNum][];
         initAnimation0();
         initAnimation1();
         initAnimation2();
+        initAnimationBomb();
     }
     private void initMatrixLayout(){//矩阵型的布局
         WindowManager wm= (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
@@ -224,7 +252,21 @@ public class GameView extends View {
         initRandomLayout();
         restPutCatDelay=putCatDelay;
     }
-
+    private void loseHP(){
+        HP = Math.max(0, HP - 1);
+    }
+    private int getNextId(){
+        int tmp = random.nextInt(100);
+        if (tmp >= 90)
+            tmp = 2;
+        else if (tmp >= 60)
+            tmp = 1;
+        else if (tmp>=10)
+            tmp = 0;
+        else
+            tmp=-1;
+        return tmp;
+    }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void initGame(){
         initSounds();
@@ -246,15 +288,11 @@ public class GameView extends View {
                     int row = random.nextInt(rowNum);
                     int col = random.nextInt(colNum);
                     if (holes[row][col].getStatus() == Hole.EMPTY) {
-                        int tmp = random.nextInt(6);
-                        if (tmp >= 5)
-                            tmp = 2;
-                        else if (tmp >= 3)
-                            tmp = 1;
-                        else tmp = 0;
+                        int tmp= getNextId();
                         holes[row][col].begin(tmp);
                         handler.sendEmptyMessage(0x123);
-                        playSound(catSoundId[tmp]);
+                        if (tmp>=0)//出来的是喵
+                            playSound(catSoundId[tmp]);
                     }
                 }
             }
@@ -267,12 +305,12 @@ public class GameView extends View {
                     for (int i = 0; i < rowNum; i++)
                         for (int j = 0; j < colNum; j++) {
                             if (!holes[i][j].next())
-                                HP = Math.max(0, HP - 1);
+                                loseHP();
                         }
                     handler.sendEmptyMessage(0x123);
                 }
             }
-        },0,120);
+        },0,framePeriod);
     }
     private Bitmap getBitmap(int id,int height){
         //height:从上往下截多长
@@ -290,11 +328,11 @@ public class GameView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        drawInfo(canvas);
         if (HP<=0){
             gameOver();
             return;
         }
-        drawInfo(canvas);
         for (int i= 0;i<rowNum;i++)
             for (int j=0;j<colNum;j++) {
                 int status=holes[i][j].getStatus();
@@ -306,8 +344,10 @@ public class GameView extends View {
                 }else if (status<Hole.EMPTY){
                     b=Hole.poked;
                     paint.setAlpha((Hole.EMPTY-status)*255/(Hole.EMPTY- Hole.POKED));
-                }else {
+                }else if (id>=0){//是喵
                     b= Hole.animationOutAndIn[id][status];
+                }else {//是炸弹
+                    b= Hole.animationBomb[status];
                 }
                 float x= holes[i][j].getX();
                 float y= holes[i][j].getY();
@@ -319,11 +359,13 @@ public class GameView extends View {
     }
 
     private void drawInfo(Canvas canvas){
-        Paint paint= new Paint();
-        paint.setColor(Color.RED);
-        paint.setTextSize(textSize);
-        canvas.drawText("HP: "+HP,HPX,HPY,paint);
-        canvas.drawText("Score: "+score,scoreX,scoreY,paint);
+        myContext.tvHP.mySetText(""+HP);
+        myContext.tvScore.mySetText(""+score);
+//        Paint paint= new Paint();
+//        paint.setColor(Color.RED);
+//        paint.setTextSize(textSize);
+//        canvas.drawText("HP: "+HP,HPX,HPY,paint);
+//        canvas.drawText("Score: "+score,scoreX,scoreY,paint);
     }
     private void gameOver(){
         if (isOver)
@@ -342,14 +384,14 @@ public class GameView extends View {
         }
         AlertDialog.Builder builder= new AlertDialog.Builder(getContext());
         builder.setTitle("GAME OVER");
-        builder.setMessage("Score: "+score+", restart?");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+        builder.setMessage("得分: "+score);
+        builder.setPositiveButton("再来一局", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 restart();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("不玩了", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 ((StartActivity)getContext()).finish();
@@ -373,7 +415,11 @@ public class GameView extends View {
                 if (holeX<=x&&x<=holeX+gridLength&&
                         holeY<=y&&y<=holeY+gridLength){
                     if (holes[i][j].poke()) {
-                        score+=bonus[holes[i][j].getId()];
+                        if (holes[i][j].getId()>=0){//敲到的是喵，加分
+                            score+=bonus[holes[i][j].getId()]*Hole.sameNum;//连续敲到同一种喵，奖励更多分
+                        }else {
+                            loseHP();
+                        }
                         invalidate();
                         Log.i("yaoling1997","pokedSoundId:"+pokedSoundId);
                         if (pokedSoundId>=0)

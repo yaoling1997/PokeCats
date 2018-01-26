@@ -1,11 +1,14 @@
 package com.example.acer_pc.pokecats.gamedemo;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -16,7 +19,7 @@ import android.widget.Button;
  */
 public class MainActivity extends Activity {
     SharedPreferences prefs;
-    Button btnStart,btnSetting,btnScoreboard,btnExit;
+    Button btnInfiniteMode,btnSetting,btnScoreboard,btnExit;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,8 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         bindViews();
+        ActivityManager activityManager = (ActivityManager)this.getSystemService(Context.ACTIVITY_SERVICE);
+        Log.i("yaoling1997","最大内存：" + activityManager.getMemoryClass());
         prefs=getSharedPreferences(Macro.PREFS_FILE,MODE_PRIVATE);
 
 //        SharedPreferences.Editor editor = prefs.edit();//清空用户保存的数据
@@ -41,8 +46,8 @@ public class MainActivity extends Activity {
                 if (motionEvent.getAction()==MotionEvent.ACTION_DOWN){
                     //Log.i("yaoling1997","ACTION_BUTTON_PRESS");
                     //btn.setTextSize(btn.getTextSize()+10);
-                    btn.setScaleX((float)1.2);
-                    btn.setScaleY((float)1.2);
+                    btn.setScaleX((float)0.8);
+                    btn.setScaleY((float)0.8);
 //                    btn.setWidth(btn.getWidth()+20);
 //                    btn.setHeight(btn.getWidth()+80);
                     btn.invalidate();
@@ -64,11 +69,11 @@ public class MainActivity extends Activity {
         });
     }
     private void bindViews(){
-        btnStart= (Button)findViewById(R.id.btnStart);
+        btnInfiniteMode = (Button)findViewById(R.id.btnInfiniteMode);
         btnSetting= (Button)findViewById(R.id.btnSetting);
         btnScoreboard= (Button)findViewById(R.id.btnScoreboard);
         btnExit= (Button)findViewById(R.id.btnExit);
-        addBtnAnimation(btnStart);
+        addBtnAnimation(btnInfiniteMode);
         addBtnAnimation(btnSetting);
         addBtnAnimation(btnScoreboard);
         addBtnAnimation(btnExit);
@@ -82,7 +87,7 @@ public class MainActivity extends Activity {
     }
 
     public void onClick(View view){
-        if (view.getId()==R.id.btnStart){
+        if (view.getId()==R.id.btnInfiniteMode){
             Intent intent= new Intent();
             intent.setAction(Macro.ACTION_START_ACTIVITY);
             startActivity(intent);

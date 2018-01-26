@@ -52,11 +52,11 @@ public class MusicService extends Service {
     private void stop(){
         player.stop();
         player.reset();
-
     }
     @Override
     public void onDestroy() {
         stop();
+        Log.i("yaoling1997","This is MusicService's onDestroy");
         super.onDestroy();
     }
 }

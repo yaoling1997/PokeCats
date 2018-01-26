@@ -8,27 +8,27 @@
     android:id="@+id/mainLayout">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/ivMainTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/title" />
+        android:src="@drawable/main_title" />
 
     <Button
-        android:id="@+id/btnStart"
+        android:id="@+id/btnInfiniteMode"
         android:layout_centerInParent="true"
-        android:text="Start"
+        android:text="@string/infiniteMode"
         android:onClick="onClick"
         android:background="@drawable/btn_background"
         style="@style/myButtonStyle"/>
     <Button
         android:id="@+id/btnSetting"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/btnStart"
+        android:layout_below="@id/btnInfiniteMode"
         android:layout_marginTop="10dp"
-        android:text="Setting"
+        android:text="@string/setting"
         android:onClick="onClick"
         android:background="@drawable/btn_background"
         style="@style/myButtonStyle"/>
@@ -37,7 +37,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/btnSetting"
         android:layout_marginTop="10dp"
-        android:text="Scoreboard"
+        android:text="@string/scoreboard"
         android:onClick="onClick"
         android:background="@drawable/btn_background"
         style="@style/myButtonStyle"/>
@@ -46,7 +46,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/btnScoreboard"
         android:layout_marginTop="10dp"
-        android:text="Exit"
+        android:text="@string/exit"
         android:onClick="onClick"
         android:background="@drawable/btn_background"
         style="@style/myButtonStyle"/>

@@ -48,7 +48,10 @@ public class StrokeTextView extends android.support.v7.widget.AppCompatTextView 
         outlineTextView.setTextColor(Color.parseColor("#000000"));// 描边颜色
         outlineTextView.setGravity(getGravity());
     }
-
+    public void mySetText(String s){
+        this.setText(s);
+        outlineTextView.setText(s);
+    }
     @Override
     public void setLayoutParams (ViewGroup.LayoutParams params)
     {

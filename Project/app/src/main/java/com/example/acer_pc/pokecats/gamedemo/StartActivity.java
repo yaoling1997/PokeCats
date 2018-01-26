@@ -19,12 +19,14 @@ public class StartActivity extends Activity {
     public static Timer timer;
     private RelativeLayout layout;
     private GameView gameView;
+    public StrokeTextView tvHP,tvScore;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_start);
+        bindViews();
         timer= new Timer();
         Log.i("yaoling1997","startActivity");
         gameView= new GameView(this);
@@ -34,7 +36,11 @@ public class StartActivity extends Activity {
         layout= (RelativeLayout)findViewById(R.id.startLayout);
         layout.addView(gameView);
     }
-
+    private void bindViews(){
+        tvHP= (StrokeTextView)findViewById(R.id.tvHP);
+        tvScore= (StrokeTextView)findViewById(R.id.tvScore);
+        Log.i("yaoling1997","R.id.tvHP:"+R.id.tvHP);
+    }
     @Override
     protected void onDestroy() {
         timer.cancel();
