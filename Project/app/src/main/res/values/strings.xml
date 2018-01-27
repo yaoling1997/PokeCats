@@ -13,4 +13,10 @@
     <string name="score">得分：</string>
     <string name="restart">再来一局</string>
     <string name="end">不玩了</string>
+    <string name="introduction">游戏介绍</string>
+    <string name="cat1Introduction">稳重的新加坡猫，捉到加一分。</string>
+    <string name="cat2Introduction">可靠的俄罗斯蓝猫，捉到加三分。</string>
+    <string name="cat3Introduction">淘气的曼切堪猫，捉到加五分。</string>
+    <string name="bombIntroduction">炸弹，捉到生命值减一。</string>
+    <string name="bonusIntroduction">连续捉到同一种猫有额外分数加成！</string>
 </resources>

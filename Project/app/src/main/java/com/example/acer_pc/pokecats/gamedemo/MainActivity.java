@@ -19,7 +19,7 @@ import android.widget.Button;
  */
 public class MainActivity extends Activity {
     SharedPreferences prefs;
-    Button btnInfiniteMode,btnSetting,btnScoreboard,btnExit;
+    Button btnInfiniteMode,btnSetting,btnScoreboard,btnIntroduction,btnExit;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +72,12 @@ public class MainActivity extends Activity {
         btnInfiniteMode = (Button)findViewById(R.id.btnInfiniteMode);
         btnSetting= (Button)findViewById(R.id.btnSetting);
         btnScoreboard= (Button)findViewById(R.id.btnScoreboard);
+        btnIntroduction= (Button)findViewById(R.id.btnIntroduction);
         btnExit= (Button)findViewById(R.id.btnExit);
         addBtnAnimation(btnInfiniteMode);
         addBtnAnimation(btnSetting);
         addBtnAnimation(btnScoreboard);
+        addBtnAnimation(btnIntroduction);
         addBtnAnimation(btnExit);
     }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -98,6 +100,10 @@ public class MainActivity extends Activity {
         }else if (view.getId()==R.id.btnScoreboard){
             Intent intent= new Intent();
             intent.setAction(Macro.ACTION_SCOREBOARD_ACTIVITY);
+            startActivity(intent);
+        }else if (view.getId()==R.id.btnIntroduction){
+            Intent intent= new Intent();
+            intent.setAction(Macro.ACTION_INTRODUCTION_ACTIVITY);
             startActivity(intent);
         }else if (view.getId()==R.id.btnExit){
             this.finish();

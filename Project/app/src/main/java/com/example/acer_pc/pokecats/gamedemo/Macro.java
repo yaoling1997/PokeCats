@@ -8,6 +8,7 @@ public class Macro {
     public static final String ACTION_SETTING_ACTIVITY="lyj.action.setting";
     public static final String ACTION_START_ACTIVITY="lyj.action.start";
     public static final String ACTION_SCOREBOARD_ACTIVITY="lyj.action.scoreboard";
+    public static final String ACTION_INTRODUCTION_ACTIVITY="lyj.action.introduction";
     public static final String PREFS_FILE="PokeCatsPrefs";
     public static final String OPEN="open";
     public static final String CLOSE="close";
