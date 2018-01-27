@@ -13,7 +13,8 @@ public class Hole {
     public static final int INIT_ID=-2;//初始id
     public static Bitmap [][]animationOutAndIn;//喵喵的进出动画
     public static Bitmap []animationBomb;//炸弹的动画（）
-    public static Bitmap poked;//poked的图片
+    public static Bitmap catPoked;//喵喵被打到的图片
+    public static Bitmap bombPoked;//炸弹被打到的图片
     public static Bitmap stubBack;//整个树桩
     public static Bitmap stubFront;//只保留树桩的前部分
     public static int preId=INIT_ID;//前一个被敲的东东的id

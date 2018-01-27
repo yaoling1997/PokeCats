@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
         intent.putExtra(Macro.BG_MUSIC,prefs.getString(Macro.BG_MUSIC,Macro.CLOSE));//open or close
         startService(intent);
     }
-    private void addBtnAnimation(final Button btn){
+    public static void addBtnAnimation(final Button btn){
         btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {//返回false是为了能够调用onclick事件

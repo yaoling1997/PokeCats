@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">PokeCats</string>
     <string name="btnSpace">50dp</string>
-    <string name="bgMusic">背景音乐:</string>
-    <string name="sounds">音效:</string>
+    <string name="bgMusic">背景音乐：</string>
+    <string name="sounds">音效：</string>
     <string name="infiniteMode">无限模式</string>
     <string name="setting">设置</string>
     <string name="scoreboard">积分榜</string>
     <string name="exit">退出</string>
-    <string name="No1">No.1:</string>
-    <string name="No2">No.2:</string>
-    <string name="No3">No.3:</string>
+    <string name="No1">No.1：</string>
+    <string name="No2">No.2：</string>
+    <string name="No3">No.3：</string>
+    <string name="score">得分：</string>
+    <string name="restart">再来一局</string>
+    <string name="end">不玩了</string>
 </resources>
