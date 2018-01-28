@@ -17,10 +17,19 @@
         android:src="@drawable/main_title" />
 
     <Button
-        android:id="@+id/btnInfiniteMode"
+        android:id="@+id/btnPassMode"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/ivMainTitle"
         android:layout_marginTop="150dp"
+        android:text="@string/passMode"
+        android:onClick="onClick"
+        android:background="@drawable/btn_background"
+        style="@style/myButtonStyle"/>
+    <Button
+        android:id="@+id/btnInfiniteMode"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btnPassMode"
+        android:layout_marginTop="10dp"
         android:text="@string/infiniteMode"
         android:onClick="onClick"
         android:background="@drawable/btn_background"
@@ -35,18 +44,9 @@
         android:background="@drawable/btn_background"
         style="@style/myButtonStyle"/>
     <Button
-        android:id="@+id/btnScoreboard"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/btnSetting"
-        android:layout_marginTop="10dp"
-        android:text="@string/scoreboard"
-        android:onClick="onClick"
-        android:background="@drawable/btn_background"
-        style="@style/myButtonStyle"/>
-    <Button
         android:id="@+id/btnIntroduction"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/btnScoreboard"
+        android:layout_below="@id/btnSetting"
         android:layout_marginTop="10dp"
         android:text="@string/introduction"
         android:onClick="onClick"

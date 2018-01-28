@@ -19,7 +19,7 @@ import android.widget.Button;
  */
 public class MainActivity extends Activity {
     SharedPreferences prefs;
-    Button btnInfiniteMode,btnSetting,btnScoreboard,btnIntroduction,btnExit;
+    Button btnPassMode,btnInfiniteMode,btnSetting,btnIntroduction,btnExit;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +31,22 @@ public class MainActivity extends Activity {
         Log.i("yaoling1997","最大内存：" + activityManager.getMemoryClass());
         prefs=getSharedPreferences(Macro.PREFS_FILE,MODE_PRIVATE);
 
+        unlockLevel();//解锁关卡
+
 //        SharedPreferences.Editor editor = prefs.edit();//清空用户保存的数据
 //        editor.clear();
 //        editor.commit();
+
         Intent intent= new Intent(this,MusicService.class);
         intent.putExtra(Macro.BG_MUSIC,prefs.getString(Macro.BG_MUSIC,Macro.CLOSE));//open or close
         startService(intent);
+    }
+    private void unlockLevel(){
+        SharedPreferences.Editor editor = prefs.edit();
+        for (int i=1;i<=1;i++){
+            editor.putString(Macro.LEVEL+i,Macro.OPEN);
+        }
+        editor.commit();
     }
     public static void addBtnAnimation(final Button btn){
         btn.setOnTouchListener(new View.OnTouchListener() {
@@ -44,22 +54,14 @@ public class MainActivity extends Activity {
             public boolean onTouch(View view, MotionEvent motionEvent) {//返回false是为了能够调用onclick事件
                 //Log.i("yaoling1997","This is onTouch: "+motionEvent.getAction());
                 if (motionEvent.getAction()==MotionEvent.ACTION_DOWN){
-                    //Log.i("yaoling1997","ACTION_BUTTON_PRESS");
-                    //btn.setTextSize(btn.getTextSize()+10);
                     btn.setScaleX((float)0.8);
                     btn.setScaleY((float)0.8);
-//                    btn.setWidth(btn.getWidth()+20);
-//                    btn.setHeight(btn.getWidth()+80);
                     btn.invalidate();
                     return false;
                 }
                 if (motionEvent.getAction()==MotionEvent.ACTION_UP){
-                    //Log.i("yaoling1997","ACTION_BUTTON_RELEASE");
-//                    btn.setTextSize(btn.getTextSize()-10);
                     btn.setScaleX(1);
                     btn.setScaleY(1);
-//                    btn.setWidth(btn.getWidth()-20);
-//                    btn.setHeight(btn.getHeight()-80);
                     btn.invalidate();
                     return false;
                 }
@@ -68,15 +70,16 @@ public class MainActivity extends Activity {
             }
         });
     }
+
     private void bindViews(){
+        btnPassMode = (Button)findViewById(R.id.btnPassMode);
         btnInfiniteMode = (Button)findViewById(R.id.btnInfiniteMode);
         btnSetting= (Button)findViewById(R.id.btnSetting);
-        btnScoreboard= (Button)findViewById(R.id.btnScoreboard);
         btnIntroduction= (Button)findViewById(R.id.btnIntroduction);
         btnExit= (Button)findViewById(R.id.btnExit);
+        addBtnAnimation(btnPassMode);
         addBtnAnimation(btnInfiniteMode);
         addBtnAnimation(btnSetting);
-        addBtnAnimation(btnScoreboard);
         addBtnAnimation(btnIntroduction);
         addBtnAnimation(btnExit);
     }
@@ -89,17 +92,17 @@ public class MainActivity extends Activity {
     }
 
     public void onClick(View view){
-        if (view.getId()==R.id.btnInfiniteMode){
+        if (view.getId()==R.id.btnPassMode){
             Intent intent= new Intent();
-            intent.setAction(Macro.ACTION_START_ACTIVITY);
+            intent.setAction(Macro.ACTION_PASS_MODE_ACTIVITY);
+            startActivity(intent);
+        }else if (view.getId()==R.id.btnInfiniteMode){
+            Intent intent= new Intent();
+            intent.setAction(Macro.ACTION_INFINITE_MODE_ACTIVITY);
             startActivity(intent);
         }else if (view.getId()==R.id.btnSetting){
             Intent intent= new Intent();
             intent.setAction(Macro.ACTION_SETTING_ACTIVITY);
-            startActivity(intent);
-        }else if (view.getId()==R.id.btnScoreboard){
-            Intent intent= new Intent();
-            intent.setAction(Macro.ACTION_SCOREBOARD_ACTIVITY);
             startActivity(intent);
         }else if (view.getId()==R.id.btnIntroduction){
             Intent intent= new Intent();

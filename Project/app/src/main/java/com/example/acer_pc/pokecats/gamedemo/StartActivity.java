@@ -20,6 +20,8 @@ public class StartActivity extends Activity {
     private RelativeLayout layout;
     private GameView gameView;
     public StrokeTextView tvHP,tvScore;
+    public int level;//玩家选择的关卡，0表示无限模式
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,6 +29,10 @@ public class StartActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_start);
         bindViews();
+        level=getIntent().getIntExtra(Macro.GAME_MODE,-1);
+        Log.i("yaoling1997","StartActivity,level: "+level);
+        if (level<0)
+            finish();
         timer= new Timer();
         Log.i("yaoling1997","startActivity");
         gameView= new GameView(this);

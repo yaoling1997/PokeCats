@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    android:id="@+id/mainLayout">
+
+    <ImageView
+        android:id="@+id/ivInfiniteModeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/infinite_mode_title" />
+
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ivInfiniteModeTitle"
+        android:layout_marginTop="150dp"
+        android:text="@string/startGame"
+        android:onClick="onClick"
+        android:background="@drawable/btn_background"
+        style="@style/myButtonStyle"/>
+    <Button
+        android:id="@+id/btnScoreboard"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btnStart"
+        android:layout_marginTop="10dp"
+        android:text="@string/scoreboard"
+        android:onClick="onClick"
+        android:background="@drawable/btn_background"
+        style="@style/myButtonStyle"/>
+
+</RelativeLayout>

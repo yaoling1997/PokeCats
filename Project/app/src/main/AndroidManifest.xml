@@ -56,7 +56,20 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-
+        <activity android:name=".PassModeActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="lyj.action.passMode" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".InfiniteModeActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="lyj.action.infiniteMode" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

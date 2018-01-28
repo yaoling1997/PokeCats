@@ -7,16 +7,18 @@
     <string name="setting">设置</string>
     <string name="scoreboard">积分榜</string>
     <string name="exit">退出</string>
+    <string name="startGame">开始游戏</string>
     <string name="No1">No.1：</string>
     <string name="No2">No.2：</string>
     <string name="No3">No.3：</string>
     <string name="score">得分：</string>
     <string name="restart">再来一局</string>
-    <string name="end">不玩了</string>
+    <string name="end">歇会儿</string>
     <string name="introduction">游戏介绍</string>
     <string name="cat1Introduction">稳重的新加坡猫，捉到加一分。</string>
     <string name="cat2Introduction">可靠的俄罗斯蓝猫，捉到加三分。</string>
     <string name="cat3Introduction">淘气的曼切堪猫，捉到加五分。</string>
     <string name="bombIntroduction">炸弹，捉到生命值减一。</string>
     <string name="bonusIntroduction">连续捉到同一种猫有额外分数加成！</string>
+    <string name="passMode">闯关模式</string>
 </resources>
