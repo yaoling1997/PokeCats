@@ -17,6 +17,8 @@ public class Hole {
     public static Bitmap bombPoked;//炸弹被打到的图片
     public static Bitmap stubBack;//整个树桩
     public static Bitmap stubFront;//只保留树桩的前部分
+    public static Bitmap giftBoxClose;//礼物盒关闭状态
+    public static Bitmap giftBoxOpen;//礼物盒打开状态
     public static int preId=INIT_ID;//前一个被敲的东东的id
     public static int sameNum=0;//连续敲击同一种东东多少次
 

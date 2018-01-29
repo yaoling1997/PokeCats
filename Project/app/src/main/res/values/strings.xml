@@ -18,7 +18,13 @@
     <string name="cat1Introduction">稳重的新加坡猫，捉到加一分。</string>
     <string name="cat2Introduction">可靠的俄罗斯蓝猫，捉到加三分。</string>
     <string name="cat3Introduction">淘气的曼切堪猫，捉到加五分。</string>
+    <string name="cat4Introduction">作者：李奕君，热爱编程的稀有猫，捉到生命值加一。</string>
     <string name="bombIntroduction">炸弹，捉到生命值减一。</string>
     <string name="bonusIntroduction">连续捉到同一种猫有额外分数加成！</string>
     <string name="passMode">闯关模式</string>
+    <string name="resetScoreboard">您确定要重置积分榜吗？</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="reset">重置</string>
+    <string name="theEnd">恭喜您通过重重考验，成为一位优秀的撸猫达人！</string>
 </resources>

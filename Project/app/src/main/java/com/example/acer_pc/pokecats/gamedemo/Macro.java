@@ -11,6 +11,7 @@ public class Macro {
     public static final String ACTION_INTRODUCTION_ACTIVITY="lyj.action.introduction";
     public static final String ACTION_INFINITE_MODE_ACTIVITY="lyj.action.infiniteMode";
     public static final String ACTION_PASS_MODE_ACTIVITY="lyj.action.passMode";
+    public static final String ACTION_PASS_ALL_LEVELS_ACTIVITY="lyj.action.passAllLevels";
     public static final String PREFS_FILE="PokeCatsPrefs";
     public static final String OPEN="open";
     public static final String CLOSE="close";
@@ -20,4 +21,6 @@ public class Macro {
     public static final String GAME_MODE="gameMode";//游戏模式
     public static final String LEVEL="level";//关卡
     public static final int LEVEL_NUM=30;//总关卡数，是PassModeAdapter.colNum的倍数
+    public static final int ALERTDIALOG_WIDTH=440*2;//对话框宽度
+    public static final int ALERTDIALOG_HEIGHT=210*2;//对话框高度
 }

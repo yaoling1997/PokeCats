@@ -23,11 +23,13 @@ public class MusicService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String bgMusic= intent.getStringExtra(Macro.BG_MUSIC);
-        if (bgMusic.equals(Macro.OPEN)){
-            play();
-        }else {
-            stop();
+        if (intent!=null) {
+            String bgMusic = intent.getStringExtra(Macro.BG_MUSIC);
+            if (bgMusic.equals(Macro.OPEN)) {
+                play();
+            } else {
+                stop();
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }

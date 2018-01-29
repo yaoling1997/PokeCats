@@ -70,6 +70,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name=".PassAllLevelsActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="lyj.action.passAllLevels" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

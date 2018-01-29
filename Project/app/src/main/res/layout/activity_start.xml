@@ -5,6 +5,19 @@
     android:orientation="vertical"
     android:background="@drawable/start_background"
     android:id="@+id/startLayout">
+    <com.example.acer_pc.pokecats.gamedemo.StrokeTextView
+        android:id="@+id/tvLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_alignParentLeft="true"
+        android:textSize="15sp"
+        android:textColor="#EA5246"
+        android:textStyle="bold|italic"
+        android:gravity="center_vertical|left"
+        />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

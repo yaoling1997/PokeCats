@@ -10,8 +10,7 @@
         android:id="@+id/ivScoreboardTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/scoreboard_title" />
 
@@ -34,6 +33,21 @@
         android:layout_marginTop="30dp"
         android:text="@string/No3"
         style="@style/myTextViewStyle"
+        />
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="96dp"
+        android:layout_height="40dp"
+        android:background="@drawable/btn_background"
+        android:layout_below="@id/tvNo3"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:textColor="#000055"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textAllCaps="false"
+        android:text="@string/reset"
         />
 
 </RelativeLayout>

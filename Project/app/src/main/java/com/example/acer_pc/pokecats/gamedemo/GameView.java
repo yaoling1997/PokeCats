@@ -2,6 +2,7 @@ package com.example.acer_pc.pokecats.gamedemo;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -21,7 +22,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,9 +36,10 @@ import java.util.TimerTask;
 public class GameView extends View {
     private static final int INIT_HP=5;//初始HP
     private static final int INIT_SCORE=0;//初始score
-    private static final int []bonus={1,3,5};//每打到一只喵喵增加的分数
+    private static final int catAuthorId=3;//代表作者的喵的id
+    private static final int []bonus={1,3,5,10};//每打到一只喵喵增加的分数
     private static final int gridLength=380;//一个格子的长宽
-    private static final int catKindNum=3;//喵喵种类
+    private static final int catKindNum=4;//喵喵种类
     private static final int putCatDelay =10;//延迟多久开始放喵，延迟时长为putCatDelay*putCatPeriod
     private static final int putCatPeriod =300;//放喵的周期
     private static final int framePeriod =100;//相邻两帧动画的时间间隔
@@ -169,6 +170,7 @@ public class GameView extends View {
             catSoundId[0] = soundPool.load(getContext(), R.raw.cat1, 1);
             catSoundId[1] = soundPool.load(getContext(), R.raw.cat2, 1);
             catSoundId[2] = soundPool.load(getContext(), R.raw.cat3, 1);
+            catSoundId[3] = soundPool.load(getContext(), R.raw.cat4, 1);
         }
     }
 
@@ -227,6 +229,29 @@ public class GameView extends View {
         Hole.animationOutAndIn[2][8]=getBitmap(R.drawable.cat3_7,2*gridLength/6);//7_2
         Hole.animationOutAndIn[2][9]=getBitmap(R.drawable.cat3_8,1*gridLength/6);//8_1
     }
+    private void initAnimation3(){
+        Hole.animationOutAndIn[3]= new Bitmap[20];
+        Hole.animationOutAndIn[3][0]=getBitmap(R.drawable.cat4_1,1*gridLength/6);//1_1
+        Hole.animationOutAndIn[3][1]=getBitmap(R.drawable.cat4_1,2*gridLength/6);//1_2
+        Hole.animationOutAndIn[3][2]=getBitmap(R.drawable.cat4_1,3*gridLength/6);//1_3
+        Hole.animationOutAndIn[3][3]=getBitmap(R.drawable.cat4_1,4*gridLength/6);//1_4
+        Hole.animationOutAndIn[3][4]=getBitmap(R.drawable.cat4_1,5*gridLength/6);//1_5
+        Hole.animationOutAndIn[3][5]=getBitmap(R.drawable.cat4_1,6*gridLength/6);//1_6
+        Hole.animationOutAndIn[3][6]=getBitmap(R.drawable.cat4_2,6*gridLength/6);//2_6
+        Hole.animationOutAndIn[3][7]=Hole.animationOutAndIn[3][6];//2_6
+        Hole.animationOutAndIn[3][8]=Hole.animationOutAndIn[3][5];//1_6
+        Hole.animationOutAndIn[3][9]=Hole.animationOutAndIn[3][5];//1_6
+        Hole.animationOutAndIn[3][10]=Hole.animationOutAndIn[3][6];//2_6
+        Hole.animationOutAndIn[3][11]=Hole.animationOutAndIn[3][6];//2_6
+        Hole.animationOutAndIn[3][12]=Hole.animationOutAndIn[3][5];//1_6
+        Hole.animationOutAndIn[3][13]=Hole.animationOutAndIn[3][5];//1_6
+        Hole.animationOutAndIn[3][14]=Hole.animationOutAndIn[3][5];//1_6
+        Hole.animationOutAndIn[3][15]=Hole.animationOutAndIn[3][4];//1_5
+        Hole.animationOutAndIn[3][16]=Hole.animationOutAndIn[3][3];//1_4
+        Hole.animationOutAndIn[3][17]=Hole.animationOutAndIn[3][2];//1_3
+        Hole.animationOutAndIn[3][18]=Hole.animationOutAndIn[3][1];//1_2
+        Hole.animationOutAndIn[3][19]=Hole.animationOutAndIn[3][0];//1_1
+    }
     private void initAnimationBomb(){
         Hole.animationBomb= new Bitmap[20];
         Hole.animationBomb[0]=getBitmap(R.drawable.bomb,1*gridLength/6);//0_1
@@ -255,6 +280,7 @@ public class GameView extends View {
         initAnimation0();
         initAnimation1();
         initAnimation2();
+        initAnimation3();
         initAnimationBomb();
     }
     private void initMatrixLayout(){//矩阵型的布局
@@ -309,159 +335,159 @@ public class GameView extends View {
             }
     }
     private void initLayout(){//初始布局
-        switch (myContext.level){
+        switch (myContext.getLevel()){
             case 0:
                 rowNum=infiniteModeRowNum;
                 colNum=infiniteModeColNum;
                 holes= new Hole[rowNum][colNum];
                 initRandomLayout();
                 break;
-            case 1://只有喵1
+            case 1://矩阵布局
                 rowNum=1;
                 colNum=1;
                 initMatrixLayout();
                 break;
-            case 2://只有喵1
+            case 2://矩阵布局
                 rowNum=1;
                 colNum=2;
                 initMatrixLayout();
                 break;
-            case 3://只有喵1
+            case 3://矩阵布局
                 rowNum=3;
                 colNum=1;
                 initMatrixLayout();
                 break;
-            case 4://只有喵1，矩阵布局
+            case 4://矩阵布局
                 rowNum=2;
                 colNum=2;
                 initMatrixLayout();
                 break;
-            case 5://只有喵1和炸弹，矩阵布局
+            case 5://矩阵布局
                 rowNum=2;
                 colNum=2;
                 initMatrixLayout();
                 break;
-            case 6://只有喵2，矩阵布局
+            case 6://矩阵布局
                 rowNum=2;
                 colNum=2;
                 initMatrixLayout();
                 break;
-            case 7://只有喵1和喵2，矩阵布局
+            case 7://矩阵布局
                 rowNum=2;
                 colNum=2;
                 initMatrixLayout();
                 break;
-            case 8://只有喵1、喵2和炸弹，矩阵布局
+            case 8://矩阵布局
                 rowNum=2;
                 colNum=2;
                 initMatrixLayout();
                 break;
-            case 9://只有喵1、喵2和炸弹，矩阵布局
+            case 9://矩阵布局
                 rowNum=4;
                 colNum=1;
                 initMatrixLayout();
                 break;
-            case 10://只有喵1、喵2和炸弹，随机布局
+            case 10://随机布局
                 rowNum=5;
                 colNum=1;
                 initRandomLayout();
                 break;
-            case 11://只有喵3，矩阵布局
+            case 11://矩阵布局
                 rowNum=1;
                 colNum=3;
                 initMatrixLayout();
                 break;
-            case 12://只有喵1、喵2、喵3，随机布局
+            case 12://随机布局
                 rowNum=2;
                 colNum=2;
                 initMatrixLayout();
                 break;
-            case 13://只有喵1、喵2、喵3，矩阵布局
+            case 13://矩阵布局
                 rowNum=2;
                 colNum=3;
                 initMatrixLayout();
                 break;
-            case 14://只有喵1、喵2、喵3，随机布局
+            case 14://随机布局
                 rowNum=3;
                 colNum=2;
                 initRandomLayout();
                 break;
-            case 15://只有喵1、喵2、喵3和炸弹，矩阵布局
+            case 15://矩阵布局
                 rowNum=2;
                 colNum=3;
                 initMatrixLayout();
                 break;
-            case 16://只有喵1、喵2、喵3和炸弹，矩阵布局
+            case 16://矩阵布局
                 rowNum=4;
                 colNum=2;
                 initMatrixLayout();
                 break;
-            case 17://只有喵1、喵2、喵3和炸弹，随机布局
+            case 17://随机布局
                 rowNum=1;
                 colNum=8;
                 initRandomLayout();
                 break;
-            case 18://只有喵1、喵2、喵3和炸弹，随机布局
+            case 18://随机布局
                 rowNum=1;
                 colNum=8;
                 initRandomLayout();
                 break;
-            case 19://只有喵1、喵2、喵3和炸弹，随机布局
+            case 19://随机布局
                 rowNum=1;
                 colNum=8;
                 initRandomLayout();
                 break;
-            case 20://只有喵1、喵2、喵3和炸弹，矩阵布局
+            case 20://矩阵布局
                 rowNum=3;
                 colNum=3;
                 initMatrixLayout();
                 break;
-            case 21://只有喵1、喵2、喵3和炸弹，矩阵布局
+            case 21://矩阵布局
                 rowNum=3;
                 colNum=3;
                 initMatrixLayout();
                 break;
-            case 22://只有喵1、喵2、喵3和炸弹，随机布局
+            case 22://随机布局
                 rowNum=1;
                 colNum=9;
                 initRandomLayout();
                 break;
-            case 23://只有喵1、喵2、喵3和炸弹，随机布局
+            case 23://随机布局
                 rowNum=1;
                 colNum=9;
                 initRandomLayout();
                 break;
-            case 24://只有喵1、喵2、喵3和炸弹，随机布局
+            case 24://随机布局
                 rowNum=1;
                 colNum=10;
                 initRandomLayout();
                 break;
-            case 25://只有喵1、喵2、喵3和炸弹，随机布局
+            case 25://随机布局
                 rowNum=1;
                 colNum=10;
                 initRandomLayout();
                 break;
-            case 26://只有喵1、喵2、喵3和炸弹，随机布局
+            case 26://随机布局
                 rowNum=1;
                 colNum=11;
                 initRandomLayout();
                 break;
-            case 27://只有喵1、喵2、喵3和炸弹，矩阵布局
+            case 27://矩阵布局
                 rowNum=4;
                 colNum=3;
                 initMatrixLayout();
                 break;
-            case 28://只有喵1、喵2、喵3和炸弹，矩阵布局
+            case 28://矩阵布局
                 rowNum=4;
                 colNum=3;
                 initMatrixLayout();
                 break;
-            case 29://只有喵1、喵2、喵3和炸弹，随机布局
+            case 29://随机布局
                 rowNum=1;
                 colNum=12;
                 initRandomLayout();
                 break;
-            case 30://只有喵1、喵2、喵3和炸弹，随机布局
+            case 30://随机布局
                 rowNum=1;
                 colNum=12;
                 initRandomLayout();
@@ -487,10 +513,11 @@ public class GameView extends View {
         HP = Math.max(0, HP - 1);
     }
     private int getNextId(){
-        int cat3=90,cat2=60,cat1=10;
+        int cat4=100,cat3=90,cat2=60,cat1=10;
         int tmp = random.nextInt(100);
-        switch (myContext.level){
-            case 0://只有喵1、喵2、喵3和炸弹，无限模式
+        switch (myContext.getLevel()){
+            case 0://只有喵1、喵2、喵3、喵4和炸弹，无限模式
+                cat4=99;
                 cat3=90;
                 cat2=60;
                 cat1=10;
@@ -566,94 +593,112 @@ public class GameView extends View {
                 cat1=20;
                 break;
             case 15://只有喵1、喵2、喵3和炸弹，矩阵布局
+                cat4=99;
                 cat3=90;
                 cat2=60;
                 cat1=20;
                 break;
             case 16://只有喵1、喵2、喵3和炸弹，矩阵布局
+                cat4=99;
                 cat3=80;
                 cat2=60;
                 cat1=40;
                 break;
             case 17://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=90;
                 cat2=80;
                 cat1=20;
                 break;
             case 18://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=60;
                 cat2=30;
                 cat1=10;
                 break;
             case 19://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=90;
                 cat2=60;
                 cat1=20;
                 break;
             case 20://只有喵1、喵2、喵3和炸弹，矩阵布局
+                cat4=99;
                 cat3=80;
                 cat2=50;
                 cat1=30;
                 break;
             case 21://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=90;
                 cat2=40;
                 cat1=20;
                 break;
             case 22://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=90;
                 cat2=40;
                 cat1=10;
                 break;
             case 23://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=90;
                 cat2=50;
                 cat1=20;
                 break;
             case 24://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=60;
                 cat2=40;
                 cat1=20;
                 break;
             case 25://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=80;
                 cat2=50;
                 cat1=20;
                 break;
             case 26://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=90;
                 cat2=50;
                 cat1=20;
                 break;
             case 27://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=80;
                 cat2=60;
                 cat1=20;
                 break;
             case 28://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=90;
                 cat2=70;
                 cat1=20;
                 break;
             case 29://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=70;
                 cat2=50;
                 cat1=20;
                 break;
             case 30://只有喵1、喵2、喵3和炸弹，随机布局
+                cat4=99;
                 cat3=70;
                 cat2=50;
                 cat1=20;
                 break;
         }
-        if (tmp >= cat3)
+        if (tmp>=cat4)
+            tmp = 3;
+        else if (tmp >= cat3)
             tmp = 2;
         else if (tmp >= cat2)
             tmp = 1;
         else if (tmp>=cat1)
             tmp = 0;
         else
-            tmp=-1;
+            tmp = -1;
         return tmp;
     }
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -664,6 +709,8 @@ public class GameView extends View {
         Hole.bombPoked =getBitmap(R.drawable.bomb_poked,gridLength);
         Hole.stubFront=getBitmap(R.drawable.stub_front,gridLength);
         Hole.stubBack=getBitmap(R.drawable.stub_back,gridLength);
+        Hole.giftBoxClose=getBitmap(R.drawable.giftbox_close,gridLength);
+        Hole.giftBoxOpen=getBitmap(R.drawable.giftbox_open,gridLength);
         Log.i("yaoling1997","Hole ok");
         //initMatrixLayout();
         restart();
@@ -722,30 +769,39 @@ public class GameView extends View {
             for (int j=0;j<colNum;j++) {
                 int status=holes[i][j].getStatus();
                 int id=holes[i][j].getId();
-                Bitmap b;
-                Paint paint= new Paint();
+                Bitmap bitmapEvent;
+                Paint paintEvent= new Paint();
                 if (status==Hole.EMPTY){
-                    b=Hole.stubBack;
+                    bitmapEvent=Hole.stubBack;
                 }else if (status<Hole.EMPTY){
                     if (id>=0)//是喵被打了
-                        b=Hole.catPoked;
+                        bitmapEvent=Hole.catPoked;
                     else//是炸弹被打了
-                        b=Hole.bombPoked;
-                    paint.setAlpha((Hole.EMPTY-status)*255/(Hole.EMPTY- Hole.POKED));
+                        bitmapEvent=Hole.bombPoked;
+                    paintEvent.setAlpha((Hole.EMPTY-status)*255/(Hole.EMPTY- Hole.POKED));
                 }else if (id>=0){//是喵
-                    b= Hole.animationOutAndIn[id][status];
+                    bitmapEvent= Hole.animationOutAndIn[id][status];
                 }else {//是炸弹
-                    b= Hole.animationBomb[status];
+                    bitmapEvent= Hole.animationBomb[status];
                 }
                 float x= holes[i][j].getX();
                 float y= holes[i][j].getY();
-                float catY= y+gridLength-b.getHeight();
-                canvas.drawBitmap(Hole.stubBack,x,y,null);
-                canvas.drawBitmap(b,x,catY,paint);
-                canvas.drawBitmap(Hole.stubFront,x,y,null);
+                float catY= y+gridLength-bitmapEvent.getHeight();
+                if (myContext.getLevel()>=30){
+                    if (status==Hole.EMPTY)
+                        canvas.drawBitmap(Hole.giftBoxClose, x, y, null);
+                    else {
+                        canvas.drawBitmap(bitmapEvent, x, catY, paintEvent);
+                        canvas.drawBitmap(Hole.giftBoxOpen, x, y, null);
+                    }
+                }else {
+                    canvas.drawBitmap(Hole.stubBack, x, y, null);
+                    canvas.drawBitmap(bitmapEvent, x, catY, paintEvent);
+                    canvas.drawBitmap(Hole.stubFront, x, y, null);
+                }
             }
         if (HP<=0||
-                (myContext.level>0&&score>=passScore[myContext.level])){
+                (myContext.getLevel()>0&&score>=passScore[myContext.getLevel()])){
             gameOver();
             return;
         }
@@ -753,10 +809,10 @@ public class GameView extends View {
 
     private void drawInfo(Canvas canvas){
         myContext.tvHP.mySetText(""+HP);
-        if (myContext.level==0)
+        if (myContext.getLevel()==0)
             myContext.tvScore.mySetText(""+score);
         else//闯关模式要显示目标得分
-            myContext.tvScore.mySetText(""+score+"/"+passScore[myContext.level]);
+            myContext.tvScore.mySetText(""+score+"/"+passScore[myContext.getLevel()]);
     }
     private void updateScoreboard(){//更新积分榜
         SharedPreferences prefs= getContext().getSharedPreferences(Macro.PREFS_FILE,Context.MODE_PRIVATE);
@@ -776,24 +832,22 @@ public class GameView extends View {
         if (isOver)
             return;
         isOver=true;
-        boolean isPass= myContext.level>0&&score>=passScore[myContext.level];//是否过关，决定用哪种对话框，无限模式不存在过关
+        boolean isPass= myContext.getLevel()>0&&score>=passScore[myContext.getLevel()];//是否过关，决定用哪种对话框，无限模式不存在过关
 
-        if (myContext.level==0)//是无限模式，需要更新积分榜
+        if (myContext.getLevel()==0)//是无限模式，需要更新积分榜
             updateScoreboard();
 
         AlertDialog.Builder builder= new AlertDialog.Builder(getContext());
-        //View view= myContext.getLayoutInflater().inflate(R.layout.alertdialog_gameover,null,false);
-        View view;
+        View alertDialogView;
         if (isPass) {
-            view = View.inflate(getContext(), R.layout.alertdialog_gamepass, null);
+            alertDialogView = View.inflate(getContext(), R.layout.alertdialog_gamepass, null);
         }else {
-            view = View.inflate(getContext(), R.layout.alertdialog_gameover, null);
+            alertDialogView = View.inflate(getContext(), R.layout.alertdialog_gameover, null);
         }
-        TextView tvGameOver= (TextView)findViewById(R.id.tvTitle);
-        StrokeTextView tvContent= (StrokeTextView)view.findViewById(R.id.tvContent);
-        Button btnStart= (Button)view.findViewById(R.id.btnStart);
-        Button btnEnd= (Button)view.findViewById(R.id.btnEnd);
-        builder.setView(view);
+        StrokeTextView tvContent= (StrokeTextView)alertDialogView.findViewById(R.id.tvContent);
+        Button btnStart= (Button)alertDialogView.findViewById(R.id.btnStart);
+        Button btnEnd= (Button)alertDialogView.findViewById(R.id.btnEnd);
+        builder.setView(alertDialogView);
         builder.setCancelable(false);
 
         final AlertDialog dialog= builder.create();
@@ -809,23 +863,33 @@ public class GameView extends View {
             });
         }else {//过关对话框
             tvContent.setText("恭喜过关！");
-            if (myContext.level<Macro.LEVEL_NUM) {
+            if (myContext.getLevel()<Macro.LEVEL_NUM) {
                 SharedPreferences prefs= myContext.getSharedPreferences(Macro.PREFS_FILE,Context.MODE_PRIVATE);//解锁下一关
                 SharedPreferences.Editor editor= prefs.edit();
-                editor.putString(Macro.LEVEL+(myContext.level+1),Macro.OPEN);
+                editor.putString(Macro.LEVEL+(myContext.getLevel()+1),Macro.OPEN);
                 editor.commit();
 
-                myContext.level++;//跳至下一关
                 btnStart.setText("下一关");
                 btnStart.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        myContext.updateLevel(myContext.getLevel()+1);;//跳至下一关
                         restart();
                         dialog.dismiss();
                     }
                 });
             }else {
                 btnStart.setText("恭喜通关");
+                btnStart.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent= new Intent();
+                        intent.setAction(Macro.ACTION_PASS_ALL_LEVELS_ACTIVITY);
+                        getContext().startActivity(intent);
+                        ((StartActivity)getContext()).finish();
+                        dialog.dismiss();
+                    }
+                });
             }
         }
         btnEnd.setOnClickListener(new OnClickListener() {
@@ -840,8 +904,8 @@ public class GameView extends View {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable());
         dialog.show();//show必须放前面，不知道为啥
         WindowManager.LayoutParams  lp= dialog.getWindow().getAttributes();
-        lp.width=440*2;
-        lp.height=210*2;
+        lp.width=Macro.ALERTDIALOG_WIDTH;
+        lp.height=Macro.ALERTDIALOG_HEIGHT;
         dialog.getWindow().setAttributes(lp);
     }
 
@@ -860,6 +924,8 @@ public class GameView extends View {
                     if (holes[i][j].poke()) {
                         if (holes[i][j].getId()>=0){//敲到的是喵，加分
                             score+=bonus[holes[i][j].getId()]*Hole.sameNum;//连续敲到同一种喵，奖励更多分
+                            if (holes[i][j].getId()==catAuthorId)//敲到作者加血
+                                HP++;
                             Log.i("yaoling1997","catPokedSoundId:"+ catPokedSoundId);
                             if (catPokedSoundId >=0)
                                 playSound(catPokedSoundId);
