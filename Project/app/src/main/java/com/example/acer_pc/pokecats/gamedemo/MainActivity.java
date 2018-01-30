@@ -34,9 +34,9 @@ public class MainActivity extends Activity {
         Log.i("yaoling1997","最大内存：" + activityManager.getMemoryClass());
         prefs=getSharedPreferences(Macro.PREFS_FILE,MODE_PRIVATE);
 
-//        SharedPreferences.Editor editor = prefs.edit();//清空用户保存的数据
-//        editor.clear();
-//        editor.commit();
+        SharedPreferences.Editor editor = prefs.edit();//清空用户保存的数据
+        editor.clear();
+        editor.commit();
 
         unlockLevel();//解锁关卡
         initBackgroundMusicAndSoundsPrefs();//第一次玩，默认音效和背景音乐打开
@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
     }
     private void unlockLevel(){
         SharedPreferences.Editor editor = prefs.edit();
-        for (int i=1;i<=30;i++){
+        for (int i=1;i<=1;i++){
             editor.putString(Macro.LEVEL+i,Macro.OPEN);
         }
         editor.commit();
